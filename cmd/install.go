@@ -8,33 +8,36 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// installCmd represents the install command
 var installCmd = &cobra.Command{
 	Use:   "install",
-	Short: "This will get and the dependencies in your publish.yaml file and install them.",
-	Long: `The install command is used to fetch and install all dependencies listed in your publish.yaml file.
-It ensures that your project has all the necessary packages and libraries to run smoothly. This command is essential for setting up your development environment and keeping it up to date with the latest dependencies.`,
+	Short: "Install dependencies or build the app",
+	Long: `Use this command to install pub dependencies or build the APK.
+
+By default, it runs 'flutter pub get'.
+Use the '--releasebuild' flag to build the APK in release mode.
+
+Examples:
+  pralex install
+  pralex install --releasebuild`,
 	Run: func(cmd *cobra.Command, args []string) {
-		buildFlag, _ := cmd.Flags().GetBool("releasebuild")
-		install(buildFlag)
+		releaseBuild, _ := cmd.Flags().GetBool("releasebuild")
+		install(releaseBuild)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(installCmd)
-
-	// Change from StringP to BoolP
-	installCmd.Flags().BoolP("releasebuild", "b", false, "Build application in release mode")
+	installCmd.Flags().BoolP("releasebuild", "b", false, "Build the app in release mode")
 }
 
 func install(releaseBuild bool) {
 	var cmd *exec.Cmd
 
 	if releaseBuild {
-		fmt.Println("📦 Installing release build ...")
+		fmt.Println("🚀 Building release APK ...")
 		cmd = exec.Command("flutter", "build", "apk")
 	} else {
-		fmt.Println("📦 Installing pub dependencies...")
+		fmt.Println("📦 Fetching pub dependencies ...")
 		cmd = exec.Command("flutter", "pub", "get")
 	}
 

@@ -7,11 +7,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// pushCmd represents the push command
 var pushCmd = &cobra.Command{
 	Use:   "push [branch]",
-	Short: "Push local commits to a Git remote",
-	Long:  `Push commits to a Git remote. If a branch is provided, pushes to that branch on origin.`,
+	Short: "Push local commits to remote repository",
+	Long: `Push your local commits to the remote Git repository.
+
+Examples:
+  pralex push            → pushes to the current branch
+  pralex push main       → pushes to the 'main' branch on origin`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			runGitPush()
@@ -27,22 +30,20 @@ func init() {
 
 func runGitPush() {
 	fmt.Println("🔁 Running: git push")
-
 	out, err := exec.Command("git", "push").CombinedOutput()
 	if err != nil {
-		fmt.Printf("❌ Error: %v\n%s\n", err, string(out))
+		fmt.Printf("❌ Push failed:\n%v\n%s\n", err, string(out))
 		return
 	}
-	fmt.Printf("✅ Push Successful:\n%s\n", string(out))
+	fmt.Printf("✅ Push successful:\n%s\n", string(out))
 }
 
 func runGitPushToBranch(branch string) {
 	fmt.Printf("🔁 Running: git push origin %s\n", branch)
-
 	out, err := exec.Command("git", "push", "origin", branch).CombinedOutput()
 	if err != nil {
-		fmt.Printf("❌ Error: %v\n%s\n", err, string(out))
+		fmt.Printf("❌ Push to '%s' failed:\n%v\n%s\n", branch, err, string(out))
 		return
 	}
-	fmt.Printf("✅ Push to '%s' Successful:\n%s\n", branch, string(out))
+	fmt.Printf("✅ Push to '%s' successful:\n%s\n", branch, string(out))
 }

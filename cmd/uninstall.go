@@ -1,6 +1,3 @@
-/*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -11,16 +8,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// uninstallCmd represents the uninstall command
 var uninstallCmd = &cobra.Command{
 	Use:   "uninstall",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Clean the Flutter project",
+	Long: `Run 'flutter clean' to remove the build directory and cached data 
+from your Flutter project.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		uninstall()
 	},
@@ -31,18 +23,17 @@ func init() {
 }
 
 func uninstall() {
-	var cmd *exec.Cmd
 	fmt.Println("🧹 Cleaning up Flutter project...")
-	cmd = exec.Command("flutter", "clean")
 
-	cmd.Stdout = cmd.Stdout
-	cmd.Stderr = cmd.Stderr
-	cmd.Stdin = cmd.Stdin
+	cmd := exec.Command("flutter", "clean")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
 
 	if err := cmd.Run(); err != nil {
-		fmt.Fprintf(os.Stderr, "❌ Command failed: %v\n", err)
+		fmt.Fprintf(os.Stderr, "❌ Failed to clean project: %v\n", err)
 		os.Exit(1)
 	}
 
-	fmt.Println("✅ Done!")
+	fmt.Println("✅ Project cleaned successfully.")
 }

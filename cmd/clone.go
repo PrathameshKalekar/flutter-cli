@@ -7,11 +7,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// cloneCmd represents the clone command
 var cloneCmd = &cobra.Command{
 	Use:   "clone <repository_url> [branch]",
-	Short: "Clones a git repository",
-	Long:  `Clone a remote Git repository. Optionally specify a branch to clone.`,
+	Short: "Clone a Git repository",
+	Long: `Clone a remote Git repository to your local machine.
+
+You can optionally provide a branch name to clone a specific branch.
+
+Examples:
+  pralex clone https://github.com/user/repo.git
+  pralex clone https://github.com/user/repo.git develop`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
 			fmt.Println("Usage: pralex clone <repository_url> [branch]")
@@ -30,7 +35,6 @@ func init() {
 	rootCmd.AddCommand(cloneCmd)
 }
 
-// cloneRepo handles the actual cloning logic
 func cloneRepo(repoURL string, branch string) {
 	if branch != "" {
 		fmt.Printf("Cloning branch '%s' from %s...\n", branch, repoURL)

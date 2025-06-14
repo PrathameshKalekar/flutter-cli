@@ -9,8 +9,14 @@ import (
 
 var changeCmd = &cobra.Command{
 	Use:   "change <branch>",
-	Short: "Switches to the specified Git branch",
-	Long:  `Changes the current Git branch by running: git checkout <branch>`,
+	Short: "Checkout a specific Git branch",
+	Long: `Use this command to switch to a different Git branch.
+
+Example:
+  pralex change main
+  pralex change feature/new-ui
+
+This runs 'git checkout <branch>' under the hood.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
 			fmt.Println("Usage: pralex change <branch>")
