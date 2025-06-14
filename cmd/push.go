@@ -30,7 +30,7 @@ func init() {
 }
 
 func runGitPush() {
-	fmt.Println("🔁 Running: git push")
+	fmt.Println("🔁 Pusing to current branch ...")
 
 	cmd := exec.Command("git", "push")
 	cmd.Stdout = os.Stdout
@@ -45,7 +45,7 @@ func runGitPush() {
 }
 
 func runGitPushToBranch(branch string) {
-	fmt.Printf("🔁 Running: git push origin %s\n", branch)
+	fmt.Printf("🔁 Pushing to branch %s\n", branch)
 
 	cmd := exec.Command("git", "push", "origin", branch)
 	cmd.Stdout = os.Stdout
