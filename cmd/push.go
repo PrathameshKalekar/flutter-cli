@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 
 	"github.com/spf13/cobra"
@@ -30,20 +31,30 @@ func init() {
 
 func runGitPush() {
 	fmt.Println("🔁 Running: git push")
-	out, err := exec.Command("git", "push").CombinedOutput()
-	if err != nil {
-		fmt.Printf("❌ Push failed:\n%v\n%s\n", err, string(out))
+
+	cmd := exec.Command("git", "push")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+
+	if err := cmd.Run(); err != nil {
+		fmt.Printf("❌ Push failed: %v\n", err)
 		return
 	}
-	fmt.Printf("✅ Push successful:\n%s\n", string(out))
+	fmt.Println("✅ Push successful")
 }
 
 func runGitPushToBranch(branch string) {
 	fmt.Printf("🔁 Running: git push origin %s\n", branch)
-	out, err := exec.Command("git", "push", "origin", branch).CombinedOutput()
-	if err != nil {
-		fmt.Printf("❌ Push to '%s' failed:\n%v\n%s\n", branch, err, string(out))
+
+	cmd := exec.Command("git", "push", "origin", branch)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+
+	if err := cmd.Run(); err != nil {
+		fmt.Printf("❌ Push to '%s' failed: %v\n", branch, err)
 		return
 	}
-	fmt.Printf("✅ Push to '%s' successful:\n%s\n", branch, string(out))
+	fmt.Printf("✅ Push to '%s' successful\n", branch)
 }

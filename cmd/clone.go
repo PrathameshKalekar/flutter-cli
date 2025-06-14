@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 
 	"github.com/spf13/cobra"
@@ -36,21 +37,24 @@ func init() {
 }
 
 func cloneRepo(repoURL string, branch string) {
+	var cmd *exec.Cmd
+
 	if branch != "" {
-		fmt.Printf("Cloning branch '%s' from %s...\n", branch, repoURL)
-		output, err := exec.Command("git", "clone", "--branch", branch, repoURL).CombinedOutput()
-		if err != nil {
-			fmt.Printf("❌ Error cloning repo: %v\n%s\n", err, string(output))
-			return
-		}
-		fmt.Printf("✅ Clone successful:\n%s\n", string(output))
+		fmt.Printf("🔁 Cloning branch '%s' from %s...\n", branch, repoURL)
+		cmd = exec.Command("git", "clone", "--branch", branch, repoURL)
 	} else {
-		fmt.Printf("Cloning from %s...\n", repoURL)
-		output, err := exec.Command("git", "clone", repoURL).CombinedOutput()
-		if err != nil {
-			fmt.Printf("❌ Error cloning repo: %v\n%s\n", err, string(output))
-			return
-		}
-		fmt.Printf("✅ Clone successful:\n%s\n", string(output))
+		fmt.Printf("🔁 Cloning from %s...\n", repoURL)
+		cmd = exec.Command("git", "clone", repoURL)
 	}
+
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+
+	if err := cmd.Run(); err != nil {
+		fmt.Printf("❌ Clone failed: %v\n", err)
+		return
+	}
+
+	fmt.Println("✅ Clone successful")
 }
